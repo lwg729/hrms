@@ -1,7 +1,9 @@
 package com.lwg.hrms.mapper;
 
 import com.lwg.hrms.model.Hr;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface HrMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface HrMapper {
     int updateByPrimaryKeySelective(Hr record);
 
     int updateByPrimaryKey(Hr record);
+
+    Hr loadUserByUsername(String username);
 }

@@ -1,20 +1,55 @@
 package com.lwg.hrms.model;
 
-public class Hr {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+
+/**
+ * hr
+ * @author
+ *如果我们需要从数据库里面加载用户，那么我们在定义用户的时候就要实现一个接口UserDetails
+ * UserDetails想当于是一个规范，所有人都得实现它，这样的话以后我要获取用户名我就知道就是username，我要获取密码就是password
+ */
+public class Hr implements UserDetails {
+    /**
+     * hrID
+     */
     private Integer id;
 
+    /**
+     * 姓名
+     */
     private String name;
 
+    /**
+     * 手机号码
+     */
     private String phone;
 
+    /**
+     * 住宅电话
+     */
     private String telephone;
 
+    /**
+     * 联系地址
+     */
     private String address;
 
+    /**
+     * 是否可用
+     */
     private Boolean enabled;
 
+    /**
+     * 用户名
+     */
     private String username;
 
+    /**
+     * 密码
+     */
     private String password;
 
     private String userface;
@@ -34,7 +69,7 @@ public class Hr {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getPhone() {
@@ -42,7 +77,7 @@ public class Hr {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public String getTelephone() {
@@ -50,7 +85,7 @@ public class Hr {
     }
 
     public void setTelephone(String telephone) {
-        this.telephone = telephone == null ? null : telephone.trim();
+        this.telephone = telephone;
     }
 
     public String getAddress() {
@@ -58,31 +93,26 @@ public class Hr {
     }
 
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
+        this.address = address;
     }
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public String getUserface() {
@@ -90,7 +120,7 @@ public class Hr {
     }
 
     public void setUserface(String userface) {
-        this.userface = userface == null ? null : userface.trim();
+        this.userface = userface;
     }
 
     public String getRemark() {
@@ -98,6 +128,71 @@ public class Hr {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "Hr{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", address='" + address + '\'' +
+                ", enabled=" + enabled +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", userface='" + userface + '\'' +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
+
+    /**
+     * 账户是否没有过期
+     * @return
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /**
+     * 账户是否被锁定
+     * @return
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /**
+     * 密码是否没有过期
+     * @return
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /**
+     * 是否可用
+     * @return
+     */
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     *返回用户的所有角色
+     * @return
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 }
