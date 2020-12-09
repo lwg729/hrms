@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author lwg
- * @Date 2020/12/9 10:54
+ * @Date 2020/12/9 23:31
  * @Version 1.0
  */
 @RestController
 public class LoginController {
 
     @GetMapping("/login")
-    public RespBean login(){
-        return RespBean.ok("尚未登录,请登录");
+    public RespBean ok(){
+        return RespBean.error("尚未登录,请登录");
     }
 }

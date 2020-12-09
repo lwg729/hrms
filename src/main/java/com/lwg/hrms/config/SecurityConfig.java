@@ -59,8 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .loginProcessingUrl("/doLogin") //进入登录页面要输入的url
-                .loginPage("/login")            //默认看到的登录页面
-
+                .loginPage("/login")
                 //登录成功的处理
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
