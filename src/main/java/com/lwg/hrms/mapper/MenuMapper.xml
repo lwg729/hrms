@@ -1,32 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lwg.hrms.mapper.MenuMapper">
-  <resultMap id="BaseResultMap" type="com.lwg.hrms.model.Menu">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="path" jdbcType="VARCHAR" property="path" />
-    <result column="component" jdbcType="VARCHAR" property="component" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="iconCls" jdbcType="VARCHAR" property="iconcls" />
-    <result column="keepAlive" jdbcType="BIT" property="keepalive" />
-    <result column="requireAuth" jdbcType="BIT" property="requireauth" />
-    <result column="parentId" jdbcType="INTEGER" property="parentid" />
-    <result column="enabled" jdbcType="BIT" property="enabled" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.lwg.hrms.model.Menu">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="component" jdbcType="VARCHAR" property="component"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="iconCls" jdbcType="VARCHAR" property="iconCls"/>
+        <result column="parentId" jdbcType="INTEGER" property="parentId"/>
+        <result column="enabled" jdbcType="BIT" property="enabled"/>
+        <association property="meta" javaType="com.lwg.hrms.model.Meta">
+            <result column="requireAuth" jdbcType="BIT" property="requireAuth"/>
+            <result column="keepAlive" jdbcType="BIT" property="keepAlive"/>
+        </association>
+    </resultMap>
+    <resultMap id="Menu2" type="com.lwg.hrms.model.Menu" extends="BaseResultMap">
+        <collection property="children" ofType="com.lwg.hrms.model.Menu">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="url" jdbcType="VARCHAR" property="url"/>
+            <result column="path" jdbcType="VARCHAR" property="path"/>
+            <result column="component" jdbcType="VARCHAR" property="component"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="iconCls" jdbcType="VARCHAR" property="iconCls"/>
+            <result column="parentId" jdbcType="INTEGER" property="parentId"/>
+            <result column="enabled" jdbcType="BIT" property="enabled"/>
+            <association property="meta" javaType="com.lwg.hrms.model.Meta">
+                <result column="requireAuth" jdbcType="BIT" property="requireAuth"/>
+                <result column="keepAlive" jdbcType="BIT" property="keepAlive"/>
+            </association>
+        </collection>
+
+    </resultMap>
+    <sql id="Base_Column_List">
     id, url, path, component, name, iconCls, keepAlive, requireAuth, parentId, enabled
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from menu
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+    <select id="getMenusByHrId" resultMap="Menu2">
+        SELECT DISTINCT
+            m1.*,
+            m2.id AS id2,
+            m2.url AS url2,
+            m2.path AS path2,
+            m2.component AS component2,
+            m2.`name` AS `name2`,
+            m2.iconCls AS iconCls2,
+            m2.keepAlive AS keepAlive2,
+            m2.requireAuth AS requireAuth2,
+            m2.parentId AS parentId2,
+            m2.enabled AS enabled2
+        FROM
+            menu m1,
+            menu m2,
+            hr_role hrr,
+            menu_role mr
+        WHERE
+            m1.id = m2.parentId
+            AND hrr.hrid = #{hrid}
+            AND hrr.rid = mr.rid
+            AND mr.mid = m2.id
+            AND m2.enabled = TRUE
+        ORDER BY
+            m1.id,
+            m2.id
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from menu
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from menu
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.lwg.hrms.model.Menu">
+    <insert id="insert" parameterType="com.lwg.hrms.model.Menu">
     insert into menu (id, url, path, 
       component, name, iconCls, 
       keepAlive, requireAuth, parentId, 
@@ -36,107 +85,107 @@
       #{keepalive,jdbcType=BIT}, #{requireauth,jdbcType=BIT}, #{parentid,jdbcType=INTEGER}, 
       #{enabled,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.lwg.hrms.model.Menu">
-    insert into menu
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="url != null">
-        url,
-      </if>
-      <if test="path != null">
-        path,
-      </if>
-      <if test="component != null">
-        component,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="iconcls != null">
-        iconCls,
-      </if>
-      <if test="keepalive != null">
-        keepAlive,
-      </if>
-      <if test="requireauth != null">
-        requireAuth,
-      </if>
-      <if test="parentid != null">
-        parentId,
-      </if>
-      <if test="enabled != null">
-        enabled,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="url != null">
-        #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="path != null">
-        #{path,jdbcType=VARCHAR},
-      </if>
-      <if test="component != null">
-        #{component,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="iconcls != null">
-        #{iconcls,jdbcType=VARCHAR},
-      </if>
-      <if test="keepalive != null">
-        #{keepalive,jdbcType=BIT},
-      </if>
-      <if test="requireauth != null">
-        #{requireauth,jdbcType=BIT},
-      </if>
-      <if test="parentid != null">
-        #{parentid,jdbcType=INTEGER},
-      </if>
-      <if test="enabled != null">
-        #{enabled,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lwg.hrms.model.Menu">
-    update menu
-    <set>
-      <if test="url != null">
-        url = #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="path != null">
-        path = #{path,jdbcType=VARCHAR},
-      </if>
-      <if test="component != null">
-        component = #{component,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="iconcls != null">
-        iconCls = #{iconcls,jdbcType=VARCHAR},
-      </if>
-      <if test="keepalive != null">
-        keepAlive = #{keepalive,jdbcType=BIT},
-      </if>
-      <if test="requireauth != null">
-        requireAuth = #{requireauth,jdbcType=BIT},
-      </if>
-      <if test="parentid != null">
-        parentId = #{parentid,jdbcType=INTEGER},
-      </if>
-      <if test="enabled != null">
-        enabled = #{enabled,jdbcType=BIT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.lwg.hrms.model.Menu">
+    <insert id="insertSelective" parameterType="com.lwg.hrms.model.Menu">
+        insert into menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="path != null">
+                path,
+            </if>
+            <if test="component != null">
+                component,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="iconcls != null">
+                iconCls,
+            </if>
+            <if test="keepalive != null">
+                keepAlive,
+            </if>
+            <if test="requireauth != null">
+                requireAuth,
+            </if>
+            <if test="parentid != null">
+                parentId,
+            </if>
+            <if test="enabled != null">
+                enabled,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="component != null">
+                #{component,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="iconcls != null">
+                #{iconcls,jdbcType=VARCHAR},
+            </if>
+            <if test="keepalive != null">
+                #{keepalive,jdbcType=BIT},
+            </if>
+            <if test="requireauth != null">
+                #{requireauth,jdbcType=BIT},
+            </if>
+            <if test="parentid != null">
+                #{parentid,jdbcType=INTEGER},
+            </if>
+            <if test="enabled != null">
+                #{enabled,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lwg.hrms.model.Menu">
+        update menu
+        <set>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="component != null">
+                component = #{component,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="iconcls != null">
+                iconCls = #{iconcls,jdbcType=VARCHAR},
+            </if>
+            <if test="keepalive != null">
+                keepAlive = #{keepalive,jdbcType=BIT},
+            </if>
+            <if test="requireauth != null">
+                requireAuth = #{requireauth,jdbcType=BIT},
+            </if>
+            <if test="parentid != null">
+                parentId = #{parentid,jdbcType=INTEGER},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.lwg.hrms.model.Menu">
     update menu
     set url = #{url,jdbcType=VARCHAR},
       path = #{path,jdbcType=VARCHAR},
