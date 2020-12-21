@@ -1,7 +1,10 @@
 package com.lwg.hrms.mapper;
 
 import com.lwg.hrms.model.Role;
+import org.apache.ibatis.annotations.Mapper;
 
+
+@Mapper
 public interface RoleMapper {
     int deleteByPrimaryKey(Integer id);
 

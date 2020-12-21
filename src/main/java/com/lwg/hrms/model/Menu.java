@@ -1,8 +1,9 @@
 package com.lwg.hrms.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Menu {
+public class Menu implements Serializable {
     private Integer id;
 
     private String url;
@@ -19,25 +20,17 @@ public class Menu {
 
     private Boolean enabled;
 
-    //多对一
+    //多对一 封装公有的属性
     private Meta meta;
+
     //一对多
     private List<Menu> children;
 
-    public Meta getMeta() {
-        return meta;
-    }
+    //一对多 一个菜单拥有多个角色
+    private List<Role> roles;
 
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
-
-    public List<Menu> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Menu> children) {
-        this.children = children;
+    public List<Role> getRoles() {
+        return roles;
     }
 
     public Integer getId() {
@@ -104,19 +97,23 @@ public class Menu {
         this.enabled = enabled;
     }
 
-    @Override
-    public String toString() {
-        return "com.lwg.hrms.model.Menu{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", path='" + path + '\'' +
-                ", component='" + component + '\'' +
-                ", name='" + name + '\'' +
-                ", iconCls='" + iconCls + '\'' +
-                ", parentId=" + parentId +
-                ", enabled=" + enabled +
-                ", meta=" + meta +
-                ", children=" + children +
-                '}';
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
+
+    public List<Menu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Menu> children) {
+        this.children = children;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

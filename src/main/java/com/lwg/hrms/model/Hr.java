@@ -1,9 +1,12 @@
 package com.lwg.hrms.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * hr
@@ -56,6 +59,8 @@ public class Hr implements UserDetails {
 
     private String remark;
 
+    private List<Role> roles;
+
     public Integer getId() {
         return id;
     }
@@ -96,6 +101,10 @@ public class Hr implements UserDetails {
         this.address = address;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
@@ -104,7 +113,6 @@ public class Hr implements UserDetails {
     public String getUsername() {
         return username;
     }
-
 
     @Override
     public String getPassword() {
@@ -131,20 +139,12 @@ public class Hr implements UserDetails {
         this.remark = remark;
     }
 
-    @Override
-    public String toString() {
-        return "Hr{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", address='" + address + '\'' +
-                ", enabled=" + enabled +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", userface='" + userface + '\'' +
-                ", remark='" + remark + '\'' +
-                '}';
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     /**
@@ -193,6 +193,10 @@ public class Hr implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<SimpleGrantedAuthority> authorities=new ArrayList<>(roles.size());
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
     }
 }
