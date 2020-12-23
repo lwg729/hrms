@@ -1,7 +1,12 @@
 package com.lwg.hrms.mapper;
 
 import com.lwg.hrms.model.Position;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
+@Mapper
 public interface PositionMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +19,8 @@ public interface PositionMapper {
     int updateByPrimaryKeySelective(Position record);
 
     int updateByPrimaryKey(Position record);
+
+    List<Position> getAllPositions();
+
+    int deletePositionByIds(@Param("ids") Integer[] ids);
 }

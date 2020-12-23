@@ -1,5 +1,8 @@
 package com.lwg.hrms.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Position {
@@ -7,7 +10,8 @@ public class Position {
 
     private String name;
 
-    private Date createdate;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
+    private Date createDate;
 
     private Boolean enabled;
 
@@ -27,12 +31,12 @@ public class Position {
         this.name = name == null ? null : name.trim();
     }
 
-    public Date getCreatedate() {
-        return createdate;
+    public Date getcreateDate() {
+        return createDate;
     }
 
-    public void setCreatedate(Date createdate) {
-        this.createdate = createdate;
+    public void setcreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public Boolean getEnabled() {

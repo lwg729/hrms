@@ -141,21 +141,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .csrf().disable()
-                //
+
                 .exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPoint() {
-                    @Override
-                    public void commence(HttpServletRequest req, HttpServletResponse resp,
-                                         AuthenticationException authException) throws IOException, ServletException {
-                        resp.setContentType("application/json;charset=utf-8");
-                        PrintWriter out = resp.getWriter();
-                        RespBean error = RespBean.error("访问失败");
-                        if (authException instanceof InsufficientAuthenticationException) {
-                            error.setMsg("非法路径访问,请登录后再进行操作!!!");
-                        }
-                        out.write(new ObjectMapper().writeValueAsString(error));
-                        out.flush();
-                        out.close();
-                    }
+            @Override
+            public void commence(HttpServletRequest req, HttpServletResponse resp,
+                                 AuthenticationException authException) throws IOException, ServletException {
+                resp.setContentType("application/json;charset=utf-8");
+                PrintWriter out = resp.getWriter();
+                RespBean error = RespBean.error("访问失败");
+                if (authException instanceof InsufficientAuthenticationException) {
+                    error.setMsg("非法路径访问,请登录后再进行操作!!!");
+                }
+                out.write(new ObjectMapper().writeValueAsString(error));
+                out.flush();
+                out.close();
+            }
         });
     }
 }
