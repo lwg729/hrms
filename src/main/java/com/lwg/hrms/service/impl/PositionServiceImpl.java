@@ -27,8 +27,8 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public int addPosition(Position position) {
-        position.setEnabled(true);
         position.setcreateDate(new Date());
+        position.setEnabled(true);
         return positionMapper.insertSelective(position);
     }
 
