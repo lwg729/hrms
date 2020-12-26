@@ -35,12 +35,16 @@ public class JobLevelServiceImpl implements JobLevelService {
     @Override
     public int updateJobLevel(JobLevel jobLevel) {
         jobLevel.setcreateDate(new Date());
-        jobLevel.setEnabled(true);
         return jobLevelMapper.updateByPrimaryKeySelective(jobLevel);
     }
 
     @Override
     public int deleteJobLevelById(Integer id) {
         return jobLevelMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int deleteJobLevelByIds(Integer[] ids) {
+        return jobLevelMapper.deleteJobLevelByIds(ids);
     }
 }

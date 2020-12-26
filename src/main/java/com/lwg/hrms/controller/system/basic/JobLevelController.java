@@ -49,4 +49,12 @@ public class JobLevelController {
         }
         return RespBean.error("删除失败");
     }
+
+    @DeleteMapping("/")
+    public RespBean deleteJobLevelByIds(Integer[] ids){
+        if (jobLevelService.deleteJobLevelByIds(ids)==ids.length){
+            return RespBean.ok("删除成功");
+        }
+        return RespBean.error("删除失败");
+    }
 }

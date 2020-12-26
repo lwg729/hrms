@@ -17,4 +17,6 @@ public interface JobLevelService {
     int updateJobLevel(JobLevel jobLevel);
 
     int deleteJobLevelById(Integer id);
+
+    int deleteJobLevelByIds(Integer[] ids);
 }

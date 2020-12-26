@@ -1,6 +1,7 @@
 package com.lwg.hrms.mapper;
 
 import com.lwg.hrms.model.JobLevel;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface JobLevelMapper {
     int updateByPrimaryKey(JobLevel record);
 
     List<JobLevel> getAllJobLevels();
+
+    int deleteJobLevelByIds(@Param("ids") Integer[] ids);
 }

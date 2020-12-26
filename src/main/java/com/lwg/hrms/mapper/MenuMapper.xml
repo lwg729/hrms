@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lwg.hrms.mapper.MenuMapper">
-    <resultMap id="BaseResultMap" type="com.lwg.hrms.model.Menu" >
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="url" property="url" jdbcType="VARCHAR" />
-        <result column="path" property="path" jdbcType="VARCHAR" />
-        <result column="component" property="component" jdbcType="VARCHAR" />
-        <result column="name" property="name" jdbcType="VARCHAR" />
-        <result column="iconCls" property="iconCls" jdbcType="VARCHAR" />
-        <result column="parentId" property="parentId" jdbcType="INTEGER" />
-        <result column="enabled" property="enabled" jdbcType="BIT" />
+    <resultMap id="BaseResultMap" type="com.lwg.hrms.model.Menu">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <result column="component" property="component" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="iconCls" property="iconCls" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="INTEGER"/>
+        <result column="enabled" property="enabled" jdbcType="BIT"/>
         <association property="meta" javaType="com.lwg.hrms.model.Meta">
-            <result column="keepAlive" property="keepAlive" jdbcType="BIT" />
-            <result column="requireAuth" property="requireAuth" jdbcType="BIT" />
+            <result column="keepAlive" property="keepAlive" jdbcType="BIT"/>
+            <result column="requireAuth" property="requireAuth" jdbcType="BIT"/>
         </association>
     </resultMap>
     <resultMap id="Menus2" type="com.lwg.hrms.model.Menu" extends="BaseResultMap">
         <collection property="children" ofType="com.lwg.hrms.model.Menu">
-            <id column="id2" property="id" jdbcType="INTEGER" />
-            <result column="url2" property="url" jdbcType="VARCHAR" />
-            <result column="path2" property="path" jdbcType="VARCHAR" />
-            <result column="component2" property="component" jdbcType="VARCHAR" />
-            <result column="name2" property="name" jdbcType="VARCHAR" />
-            <result column="iconCls2" property="iconCls" jdbcType="VARCHAR" />
-            <result column="parentId2" property="parentId" jdbcType="INTEGER" />
-            <result column="enabled2" property="enabled" jdbcType="BIT" />
+            <id column="id2" property="id" jdbcType="INTEGER"/>
+            <result column="url2" property="url" jdbcType="VARCHAR"/>
+            <result column="path2" property="path" jdbcType="VARCHAR"/>
+            <result column="component2" property="component" jdbcType="VARCHAR"/>
+            <result column="name2" property="name" jdbcType="VARCHAR"/>
+            <result column="iconCls2" property="iconCls" jdbcType="VARCHAR"/>
+            <result column="parentId2" property="parentId" jdbcType="INTEGER"/>
+            <result column="enabled2" property="enabled" jdbcType="BIT"/>
             <association property="meta" javaType="com.lwg.hrms.model.Meta">
-                <result column="keepAlive2" property="keepAlive" jdbcType="BIT" />
-                <result column="requireAuth2" property="requireAuth" jdbcType="BIT" />
+                <result column="keepAlive2" property="keepAlive" jdbcType="BIT"/>
+                <result column="requireAuth2" property="requireAuth" jdbcType="BIT"/>
             </association>
         </collection>
     </resultMap>
@@ -39,6 +39,40 @@
         </collection>
     </resultMap>
 
+    <resultMap id="menuWithChildren" type="com.lwg.hrms.model.Menu" extends="BaseResultMap">
+        <id column="id1" property="id"/>
+        <result column="name1" property="name"/>
+        <collection property="children" ofType="com.lwg.hrms.model.Menu">
+            <id column="id2" property="id"/>
+            <result column="name2" property="name"/>
+            <collection property="children" ofType="com.lwg.hrms.model.Menu">
+                <id column="id3" property="id"/>
+                <result column="name3" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!--查询所有的菜单 树形展示-->
+    <select id="getAllMenus" resultMap="menuWithChildren">
+        SELECT
+            m1.id AS id1,
+            m1.`name` AS `name1`,
+            m2.id AS id2,
+            m2.`name` AS `name2`,
+            m3.id AS id3,
+            m3.`name` AS `name3`
+        FROM
+            menu m1,
+            menu m2,
+            menu m3
+        WHERE
+            m1.id = m2.parentId
+            AND m2.id = m3.parentId
+        ORDER BY
+            m1.id,
+            m2.id,
+            m3.id
+    </select>
     <select id="getAllMenusWithRole" resultMap="MenuWithRole">
         SELECT
             m.*,
@@ -95,10 +129,12 @@
         from menu
         where id = #{id,jdbcType=INTEGER}
     </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from menu
     where id = #{id,jdbcType=INTEGER}
-  </delete>
+    </delete>
+
     <insert id="insert" parameterType="com.lwg.hrms.model.Menu">
     insert into menu (id, url, path, 
       component, name, iconCls, 
