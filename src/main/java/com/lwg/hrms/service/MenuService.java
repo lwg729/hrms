@@ -17,4 +17,6 @@ public interface MenuService {
     List<Menu> getAllMenus();
 
     List<Integer> getMidsByRid(Integer rid);
+
+    boolean updateMenuRole(Integer rid, Integer[] mids);
 }

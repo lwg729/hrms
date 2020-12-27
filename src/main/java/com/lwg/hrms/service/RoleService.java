@@ -12,4 +12,8 @@ import java.util.List;
 public interface RoleService {
 
     public List<Role> getAllRoles();
+
+    int addRole(Role role);
+
+    int deleteRoleById(Integer id);
 }

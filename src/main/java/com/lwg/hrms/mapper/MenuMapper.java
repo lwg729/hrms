@@ -2,7 +2,6 @@ package com.lwg.hrms.mapper;
 
 import com.lwg.hrms.model.Menu;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
