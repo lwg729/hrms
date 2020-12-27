@@ -52,6 +52,10 @@
         </collection>
     </resultMap>
 
+    <!--根据rid选择默认的菜单-->
+    <select id="getMidsByRid" resultType="java.lang.Integer">
+        select mid from menu_role where rid=#{rid};
+    </select>
     <!--查询所有的菜单 树形展示-->
     <select id="getAllMenus" resultMap="menuWithChildren">
         SELECT

@@ -6,6 +6,7 @@ import com.lwg.hrms.service.impl.MenuServiceImpl;
 import com.lwg.hrms.service.impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,5 +36,10 @@ public class PermissionSetController {
     @GetMapping("/menus")
     public List<Menu> getAllMenus(){
         return menuService.getAllMenus();
+    }
+
+    @GetMapping("/mids/{rid}")
+    public List<Integer> getMenusByRid(@PathVariable Integer rid){
+        return  menuService.getMidsByRid(rid);
     }
 }

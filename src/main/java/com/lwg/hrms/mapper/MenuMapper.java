@@ -2,6 +2,7 @@ package com.lwg.hrms.mapper;
 
 import com.lwg.hrms.model.Menu;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface MenuMapper {
     List<Menu> getAllMenusWithRole();
 
     List<Menu> getAllMenus();
+
+    List<Integer> getMidsByRid(Integer rid);
 }
